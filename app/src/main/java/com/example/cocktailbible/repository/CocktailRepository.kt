@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.cocktailbible.network.CocktailsService
 import com.example.cocktailbible.network.RetrofitClient
 import com.example.cocktailbible.network.data.CategoryList
+import com.example.cocktailbible.network.data.Drinks
+import com.example.cocktailbible.network.data.DrinksList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +17,7 @@ class CocktailRepository {
         RetrofitClient.getRetrofitService().create(CocktailsService::class.java)
 
     fun getCocktailCategory(): LiveData<List<CategoryList.Category>> {
-        val data: MutableLiveData<List<CategoryList.Category>> = MutableLiveData()
+        val cocktailCategoryData: MutableLiveData<List<CategoryList.Category>> = MutableLiveData()
         cocktailsService.listCocktailCategories()
             .enqueue(object : Callback<CategoryList> {
                 override fun onResponse(
@@ -26,8 +28,9 @@ class CocktailRepository {
                         "category",
                         "onResponse response:: $response"
                     )
+
                     if (response.body() != null) {
-                        data.value = response.body()?.category
+                        cocktailCategoryData.value = response.body()?.category
                         Log.d(
                             "category", "articles total result:: " + response.body()
                         )
@@ -41,9 +44,38 @@ class CocktailRepository {
                     call: Call<CategoryList>,
                     t: Throwable
                 ) {
-                    data.value = null
+                    cocktailCategoryData.value = null
                 }
             })
-        return data
+        return cocktailCategoryData
+    }
+
+    fun getCocktailList(): LiveData<List<Drinks>> {
+        val cocktailList: MutableLiveData<List<Drinks>> = MutableLiveData()
+
+        cocktailsService.listCocktailsByFirstName().enqueue(object : Callback<DrinksList> {
+            override fun onFailure(call: Call<DrinksList>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<DrinksList>, response: Response<DrinksList>) {
+                Log.d(
+                    "category",
+                    "onResponse response:: $response"
+                )
+
+                if (response.body() != null) {
+                    cocktailList.value = response.body()
+                    Log.d(
+                        "category", "drinks total result:: " + response.body()
+                    )
+                    Log.d(
+                        "category", "drinks size:: " + listOf(response.body()!!).size
+                    )
+                }
+            }
+
+        })
+        return cocktailList
     }
 }

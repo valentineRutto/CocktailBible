@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cocktailbible.R
 import com.example.cocktailbible.network.data.CategoryList
+import com.example.cocktailbible.network.data.Drinks
+import com.example.cocktailbible.network.data.DrinksList
 import kotlinx.android.synthetic.main.row_cocktail_category.view.*
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CocktailViewHolder>() {
-    var cocktailList: List<CategoryList.Category> = emptyList()
+    var cocktailList: List<Drinks> = emptyList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CocktailViewHolder {
         return CocktailViewHolder(
             LayoutInflater.from(parent.context)
@@ -22,13 +24,13 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CocktailViewHolder>
     }
 
     inner class CocktailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(cocktailCategory: CategoryList.Category) {
+        fun bind(cocktailCategory: Drinks) {
             itemView.category_name.text = cocktailCategory.strCategory
 
         }
     }
 
-    fun addData(cocktail: List<CategoryList.Category>) {
+    fun addData(cocktail: List<Drinks>) {
         this.cocktailList = cocktail
     }
 

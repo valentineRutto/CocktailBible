@@ -49,7 +49,7 @@ class FirstFragment : Fragment() {
     }
 
     private fun getCategory() {
-        cocktailViewModel.getCategoryResponseLiveData()
+        cocktailViewModel.getCocktailListByFirstName()
             .observe(viewLifecycleOwner, Observer { cocktailsCategoryList ->
                 if (cocktailsCategoryList != null) {
                     cocktailCategoryAdapter?.addData(cocktailsCategoryList)
