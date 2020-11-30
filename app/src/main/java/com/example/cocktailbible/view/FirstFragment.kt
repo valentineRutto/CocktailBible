@@ -20,8 +20,9 @@ import com.example.cocktailbible.viewModel.CocktailViewModel
 class FirstFragment : Fragment() {
     var cocktailCategoryAdapter: CategoryAdapter? = null
     private lateinit var recyclerView: RecyclerView
-    lateinit var cocktailViewModel: CocktailViewModel
     private lateinit var layoutManager: RecyclerView.LayoutManager
+
+    lateinit var cocktailViewModel: CocktailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +37,7 @@ class FirstFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.category_rv)
         layoutManager = LinearLayoutManager(requireActivity())
-        cocktailCategoryAdapter = CategoryAdapter()
+//        cocktailCategoryAdapter = CategoryAdapter(ge )
         recyclerView.setHasFixedSize(false)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = cocktailCategoryAdapter
@@ -52,7 +53,7 @@ class FirstFragment : Fragment() {
         cocktailViewModel.getCocktailListByFirstName()
             .observe(viewLifecycleOwner, Observer { cocktailsCategoryList ->
                 if (cocktailsCategoryList != null) {
-                    cocktailCategoryAdapter?.addData(cocktailsCategoryList)
+//                    cocktailCategoryAdapter?.addData(cocktailsCategoryList)
                     cocktailCategoryAdapter?.notifyDataSetChanged()
                 }
             })

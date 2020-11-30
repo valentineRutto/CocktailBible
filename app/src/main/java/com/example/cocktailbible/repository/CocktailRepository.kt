@@ -6,8 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import com.example.cocktailbible.network.CocktailsService
 import com.example.cocktailbible.network.RetrofitClient
 import com.example.cocktailbible.network.data.CategoryList
+import com.example.cocktailbible.network.data.CocktailResponse
 import com.example.cocktailbible.network.data.Drinks
 import com.example.cocktailbible.network.data.DrinksList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,6 +18,22 @@ import retrofit2.Response
 class CocktailRepository {
     var cocktailsService: CocktailsService =
         RetrofitClient.getRetrofitService().create(CocktailsService::class.java)
+
+    suspend fun fetchPopularCocktails(){
+        val popularCocktailList: MutableLiveData<CocktailResponse> = MutableLiveData()
+
+
+
+        withContext(Dispatchers.IO) {
+
+
+            val response = cocktailsService.getPopularCocktails()
+
+
+
+    }
+
+    }
 
     fun getCocktailCategory(): LiveData<List<CategoryList.Category>> {
         val cocktailCategoryData: MutableLiveData<List<CategoryList.Category>> = MutableLiveData()
@@ -53,12 +72,12 @@ class CocktailRepository {
     fun getCocktailList(): LiveData<List<Drinks>> {
         val cocktailList: MutableLiveData<List<Drinks>> = MutableLiveData()
 
-        cocktailsService.listCocktailsByFirstName().enqueue(object : Callback<DrinksList> {
-            override fun onFailure(call: Call<DrinksList>, t: Throwable) {
+        cocktailsService.listCocktailsByFirstName().enqueue(object : Callback<List<Drinks>> {
+            override fun onFailure(call: Call<List<Drinks>>, t: Throwable) {
 
             }
 
-            override fun onResponse(call: Call<DrinksList>, response: Response<DrinksList>) {
+            override fun onResponse(call: Call<List<Drinks>>, response: Response<List<Drinks>>) {
                 Log.d(
                     "category",
                     "onResponse response:: $response"
