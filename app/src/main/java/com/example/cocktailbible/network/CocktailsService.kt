@@ -30,6 +30,6 @@ interface CocktailsService {
     fun listCocktailsByFirstName(): Call<List<Drinks>>
 
     @GET("popular.php")
-    suspend fun getPopularCocktails(): List<CocktailResponse.Drink>
+    suspend fun getPopularCocktails(): CocktailResponse
 }
 

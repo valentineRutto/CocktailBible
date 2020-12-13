@@ -72,29 +72,29 @@ class CocktailRepository {
     fun getCocktailList(): LiveData<List<Drinks>> {
         val cocktailList: MutableLiveData<List<Drinks>> = MutableLiveData()
 
-        cocktailsService.listCocktailsByFirstName().enqueue(object : Callback<List<Drinks>> {
-            override fun onFailure(call: Call<List<Drinks>>, t: Throwable) {
-
-            }
-
-            override fun onResponse(call: Call<List<Drinks>>, response: Response<List<Drinks>>) {
-                Log.d(
-                    "category",
-                    "onResponse response:: $response"
-                )
-
-                if (response.body() != null) {
-                    cocktailList.value = response.body()
-                    Log.d(
-                        "category", "drinks total result:: " + response.body()
-                    )
-                    Log.d(
-                        "category", "drinks size:: " + listOf(response.body()!!).size
-                    )
-                }
-            }
-
-        })
+//        cocktailsService.listCocktailsByFirstName().enqueue(object : Callback<List<Drinks>> {
+//            override fun onFailure(call: Call<List<Drinks>>, t: Throwable) {
+//
+//            }
+//
+//            override fun onResponse(call: Call<List<Drinks>>, response: Response<List<Drinks>>) {
+//                Log.d(
+//                    "category",
+//                    "onResponse response:: $response"
+//                )
+//
+//                if (response.body() != null) {
+//                    cocktailList.value = response.body()
+//                    Log.d(
+//                        "category", "drinks total result:: " + response.body()
+//                    )
+//                    Log.d(
+//                        "category", "drinks size:: " + listOf(response.body()!!).size
+//                    )
+//                }
+//            }
+//
+//        })
         return cocktailList
     }
 }

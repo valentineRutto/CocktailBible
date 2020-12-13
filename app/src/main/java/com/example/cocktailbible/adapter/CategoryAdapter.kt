@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.cocktailbible.R
-import com.example.cocktailbible.network.data.CategoryList
 import com.example.cocktailbible.network.data.CocktailResponse
-import com.example.cocktailbible.network.data.Drinks
-import com.example.cocktailbible.network.data.DrinksList
+import com.example.cocktailbible.network.data.Drink
 import kotlinx.android.synthetic.main.row_cocktail_category.view.*
 
-class CategoryAdapter(val clickListener: ClickListener) : RecyclerView.Adapter<CategoryAdapter.CocktailViewHolder>() {
-    var cocktailList: List<CocktailResponse.Drink> = emptyList()
+
+class CategoryAdapter(val clickListener: ClickListener) :
+    RecyclerView.Adapter<CategoryAdapter.CocktailViewHolder>() {
+    var cocktailList: List<Drink> = emptyList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CocktailViewHolder {
         return CocktailViewHolder(
             LayoutInflater.from(parent.context)
@@ -25,21 +26,23 @@ class CategoryAdapter(val clickListener: ClickListener) : RecyclerView.Adapter<C
     }
 
     inner class CocktailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(cocktailCategory: CocktailResponse.Drink) {
-            itemView.category_name.text = cocktailCategory.strCategory
+        fun bind(cocktailCategory: Drink) {
+            Glide.with(itemView).load(cocktailCategory.strDrinkThumb).into(itemView.img_cocktail)
+            itemView.category_name.text = cocktailCategory.strDrink
 
         }
     }
 
-    fun addData(cocktail: List<CocktailResponse.Drink>) {
+    fun addData(cocktail: List<Drink>) {
         this.cocktailList = cocktail
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
         return cocktailList.size
     }
 
-    interface ClickListener{
-        fun onItemClicked(cocktail: List<CocktailResponse.Drink>)
+    interface ClickListener {
+        fun onItemClicked(cocktail: List<CocktailResponse>)
     }
 }

@@ -10,6 +10,6 @@ class ViewModelFactory(private val cocktailsService: CocktailsService): ViewMode
         if (modelClass.isAssignableFrom(MainViewModel::class.java)){
             return MainViewModel(cocktailsService) as T
         }
-        throw IllegalArgumentException("Unknow class Name")
+        throw IllegalArgumentException("Unknown class Name")
     }
 }
