@@ -5,17 +5,17 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.cocktailbible.R
 import com.example.cocktailbible.adapter.CategoryAdapter
+import com.example.cocktailbible.adapter.CocktailListAdapter
+import com.example.cocktailbible.adapter.OnItemClickedListener
+import com.example.cocktailbible.databinding.ActivityPopularCocktailsListBinding
 import com.example.cocktailbible.network.CocktailsService
 import com.example.cocktailbible.network.RetrofitClient
+import com.example.cocktailbible.network.data.CategoryList
 import com.example.cocktailbible.network.data.CocktailResponse
 import com.example.cocktailbible.network.data.Drink
 import com.example.cocktailbible.utils.Status
@@ -27,18 +27,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 class PopularCocktailsListActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
-
-    var cocktailCategoryAdapter: CategoryAdapter? = null
+    private lateinit var binding: ActivityPopularCocktailsListBinding
+    var cocktailCocktailListAdapter: CocktailListAdapter? = null
+    var cocktailCategoryListAdapter: CategoryAdapter? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
     var popularCocktailList: MutableList<Drink>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val toolbar =
-            findViewById<Toolbar>(R.id.toolbar)
-        toolbar.title = "Popular Cocktails"
+        binding = ActivityPopularCocktailsListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.toolbar.title = "Popular Cocktails"
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
@@ -62,20 +63,34 @@ class PopularCocktailsListActivity : AppCompatActivity() {
 
     fun setupUi() {
 
-        recyclerView = findViewById(R.id.recyclerView)
-        layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        recyclerView.setHasFixedSize(false)
-        recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.layoutManager = layoutManager
+        layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
 
-        cocktailCategoryAdapter =
-            CategoryAdapter(object : CategoryAdapter.ClickListener {
+        val  layoutManager2 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
+        binding.rvPopular.setHasFixedSize(false)
+        binding.rvPopular.itemAnimator = DefaultItemAnimator()
+        binding.rvPopular.layoutManager = layoutManager
+
+        binding.rvCategory.setHasFixedSize(false)
+        binding.rvCategory.itemAnimator = DefaultItemAnimator()
+        binding.rvCategory.layoutManager = layoutManager2
+
+        cocktailCocktailListAdapter =
+            CocktailListAdapter(object : CocktailListAdapter.ClickListener {
                 override fun onItemClicked(cocktail: List<CocktailResponse>) {
                     TODO("Not yet implemented")
                 }
             })
 
-        recyclerView.adapter = cocktailCategoryAdapter
+        cocktailCategoryListAdapter =
+            CategoryAdapter(object : OnItemClickedListener {
+
+                override fun onItemSelected(item: CategoryList, position: Int) {
+                    TODO("Not yet implemented")
+                }
+            })
+
+        binding.rvPopular.adapter = cocktailCocktailListAdapter
+        binding.rvCategory.adapter =cocktailCategoryListAdapter
     }
 
     fun setupObserver() {
@@ -85,7 +100,7 @@ class PopularCocktailsListActivity : AppCompatActivity() {
                 when (resource.status) {
                     Status.SUCCESS -> {
                         showProgress(false)
-                        cocktailCategoryAdapter?.addData(resource.data!!.drinks)
+                        cocktailCocktailListAdapter?.addData(resource.data!!.drinks)
                     }
                     Status.LOADING -> {
                         showProgress(true)
@@ -95,6 +110,26 @@ class PopularCocktailsListActivity : AppCompatActivity() {
                         showProgress(false)
                         Log.d("cocktail", popularCocktailList.message)
                         Toast.makeText(this, popularCocktailList.message, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        })
+
+        mainViewModel.getCocktailCategories().observe(this, Observer { cocktailCategoryList ->
+            cocktailCategoryList?.let { resource ->
+
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        showProgress(false)
+                        cocktailCategoryListAdapter?.submitList(resource?.data?.drinksCategory)
+                    }
+                    Status.LOADING -> {
+                        showProgress(true)
+                    }
+                    Status.ERROR -> {
+                        showProgress(false)
+                        Log.d("cocktailCategory", cocktailCategoryList.message)
+                        Toast.makeText(this, cocktailCategoryList.message, Toast.LENGTH_LONG).show()
                     }
                 }
             }

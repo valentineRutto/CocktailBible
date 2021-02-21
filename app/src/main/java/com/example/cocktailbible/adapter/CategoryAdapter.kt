@@ -1,48 +1,60 @@
 package com.example.cocktailbible.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.cocktailbible.R
-import com.example.cocktailbible.network.data.CocktailResponse
-import com.example.cocktailbible.network.data.Drink
-import kotlinx.android.synthetic.main.row_cocktail_category.view.*
+import com.example.cocktailbible.databinding.RowTextBinding
+import com.example.cocktailbible.network.data.CategoryList
 
+object  CategoryDiffer : DiffUtil.ItemCallback<CategoryList.DrinksCategory>() {
 
-class CategoryAdapter(val clickListener: ClickListener) :
-    RecyclerView.Adapter<CategoryAdapter.CocktailViewHolder>() {
-    var cocktailList: List<Drink> = emptyList()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CocktailViewHolder {
-        return CocktailViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.row_cocktail_category, parent, false)
-        )
+    override fun areItemsTheSame(
+        oldItem: CategoryList.DrinksCategory,
+        newItem: CategoryList.DrinksCategory
+    ): Boolean {
+        return oldItem == newItem
     }
 
-    override fun onBindViewHolder(holder: CocktailViewHolder, position: Int) {
-        return holder.bind(cocktailList[position])
+    override fun areContentsTheSame(
+        oldItem: CategoryList.DrinksCategory,
+        newItem: CategoryList.DrinksCategory
+    ): Boolean {
+        return oldItem == newItem
+    }
+}
+
+interface OnItemClickedListener {
+    fun onItemSelected(item: CategoryList, position: Int)
+}
+
+class CategoryAdapter(
+    var listener: OnItemClickedListener
+) : ListAdapter<CategoryList.DrinksCategory, CategoryAdapter.ViewHolder>(CategoryDiffer) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder.create(parent)
     }
 
-    inner class CocktailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(cocktailCategory: Drink) {
-            Glide.with(itemView).load(cocktailCategory.strDrinkThumb).into(itemView.img_cocktail)
-            itemView.category_name.text = cocktailCategory.strDrink
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position), listener)
+    }
 
+    class ViewHolder private constructor(
+        private val binding: RowTextBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(categoryList:CategoryList.DrinksCategory , listener: OnItemClickedListener) {
+            binding.txtCategoryName.text = categoryList?.strCategory
         }
-    }
 
-    fun addData(cocktail: List<Drink>) {
-        this.cocktailList = cocktail
-        notifyDataSetChanged()
-    }
-
-    override fun getItemCount(): Int {
-        return cocktailList.size
-    }
-
-    interface ClickListener {
-        fun onItemClicked(cocktail: List<CocktailResponse>)
+        companion object {
+            fun create(parent: ViewGroup): ViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                val binding = RowTextBinding.inflate(inflater, parent, false)
+                return ViewHolder(binding)
+            }
+        }
     }
 }

@@ -10,10 +10,22 @@ class MainViewModel(private val cocktailsService: CocktailsService) : ViewModel(
 
     fun getPopularCocktails() = liveData(Dispatchers.IO){
         emit(Resource.loading(data = null))
+
         try {
             emit(Resource.success(data= cocktailsService.getPopularCocktails()))
         }catch (exception: Exception){
             emit(Resource.error(data = null, message = exception.message?:"Unable to fetch cocktails"))
         }
     }
+
+
+    fun getCocktailCategories() = liveData(Dispatchers.IO){
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data= cocktailsService.listCocktailCategories()))
+        }catch (exception: Exception){
+            emit(Resource.error(data = null, message = exception.message?:"Unable to fetch cocktails"))
+        }
+    }
+
 }

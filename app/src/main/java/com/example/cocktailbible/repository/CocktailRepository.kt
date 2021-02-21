@@ -35,39 +35,39 @@ class CocktailRepository {
 
     }
 
-    fun getCocktailCategory(): LiveData<List<CategoryList.Category>> {
-        val cocktailCategoryData: MutableLiveData<List<CategoryList.Category>> = MutableLiveData()
-        cocktailsService.listCocktailCategories()
-            .enqueue(object : Callback<CategoryList> {
-                override fun onResponse(
-                    call: Call<CategoryList>,
-                    response: Response<CategoryList>
-                ) {
-                    Log.d(
-                        "category",
-                        "onResponse response:: $response"
-                    )
-
-                    if (response.body() != null) {
-                        cocktailCategoryData.value = response.body()?.category
-                        Log.d(
-                            "category", "articles total result:: " + response.body()
-                        )
-                        Log.d(
-                            "category", "articles size:: " + listOf(response.body()!!).size
-                        )
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<CategoryList>,
-                    t: Throwable
-                ) {
-                    cocktailCategoryData.value = null
-                }
-            })
-        return cocktailCategoryData
-    }
+//    fun getCocktailCategory(): LiveData<List<CategoryList.Category>> {
+//        val cocktailCategoryData: MutableLiveData<List<CategoryList.Category>> = MutableLiveData()
+//        cocktailsService.listCocktailCategories()
+//            .enqueue(object : Callback<CategoryList> {
+//                override fun onResponse(
+//                    call: Call<CategoryList>,
+//                    response: Response<CategoryList>
+//                ) {
+//                    Log.d(
+//                        "category",
+//                        "onResponse response:: $response"
+//                    )
+//
+//                    if (response.body() != null) {
+//                        cocktailCategoryData.value = response.body()?.category
+//                        Log.d(
+//                            "category", "articles total result:: " + response.body()
+//                        )
+//                        Log.d(
+//                            "category", "articles size:: " + listOf(response.body()!!).size
+//                        )
+//                    }
+//                }
+//
+//                override fun onFailure(
+//                    call: Call<CategoryList>,
+//                    t: Throwable
+//                ) {
+//                    cocktailCategoryData.value = null
+//                }
+//            })
+//        return cocktailCategoryData
+//    }
 
     fun getCocktailList(): LiveData<List<Drinks>> {
         val cocktailList: MutableLiveData<List<Drinks>> = MutableLiveData()

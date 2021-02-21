@@ -11,14 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cocktailbible.R
-import com.example.cocktailbible.adapter.CategoryAdapter
+import com.example.cocktailbible.adapter.CocktailListAdapter
 import com.example.cocktailbible.viewModel.CocktailViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
-    var cocktailCategoryAdapter: CategoryAdapter? = null
+    var cocktailCocktailListAdapter: CocktailListAdapter? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
@@ -40,7 +40,7 @@ class FirstFragment : Fragment() {
 //        cocktailCategoryAdapter = CategoryAdapter(ge )
         recyclerView.setHasFixedSize(false)
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = cocktailCategoryAdapter
+        recyclerView.adapter = cocktailCocktailListAdapter
 
         cocktailViewModel = ViewModelProvider(requireActivity()).get(CocktailViewModel::class.java)
 
@@ -54,7 +54,7 @@ class FirstFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer { cocktailsCategoryList ->
                 if (cocktailsCategoryList != null) {
 //                    cocktailCategoryAdapter?.addData(cocktailsCategoryList)
-                    cocktailCategoryAdapter?.notifyDataSetChanged()
+                    cocktailCocktailListAdapter?.notifyDataSetChanged()
                 }
             })
     }

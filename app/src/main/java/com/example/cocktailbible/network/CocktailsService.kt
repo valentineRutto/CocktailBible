@@ -1,9 +1,6 @@
 package com.example.cocktailbible.network
 
-import com.example.cocktailbible.network.data.CategoryList
-import com.example.cocktailbible.network.data.CocktailResponse
-import com.example.cocktailbible.network.data.Drinks
-import com.example.cocktailbible.network.data.DrinksList
+import com.example.cocktailbible.network.data.*
 import retrofit2.Call
 import retrofit2.http.GET
 
@@ -24,12 +21,14 @@ interface CocktailsService {
 //    ): Call<CocktailResponse?>?
 
     @GET("list.php?c=list")
-    fun listCocktailCategories(): Call<CategoryList>
+    suspend fun listCocktailCategories(): CategoryList
 
     @GET("search.php?f=a")
     fun listCocktailsByFirstName(): Call<List<Drinks>>
 
     @GET("popular.php")
     suspend fun getPopularCocktails(): CocktailResponse
+
+
 }
 

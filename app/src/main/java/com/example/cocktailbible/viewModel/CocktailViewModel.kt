@@ -11,12 +11,12 @@ import com.example.cocktailbible.repository.CocktailRepository
 class CocktailViewModel(application: Application) : AndroidViewModel(application) {
     private var cocktailRepository = CocktailRepository()
 
-    private var categoryResponseLiveData: LiveData<List<CategoryList.Category>> = cocktailRepository.getCocktailCategory()
+//    private var categoryResponseLiveData: LiveData<List<CategoryList.Category>> = cocktailRepository.getCocktailCategory()
     private var cocktailListByFirstNameResponseLiveData: LiveData<List<Drinks>> = cocktailRepository.getCocktailList()
 
-    fun getCategoryResponseLiveData(): LiveData<List<CategoryList.Category>> {
-        return categoryResponseLiveData
-    }
+//    fun getCategoryResponseLiveData(): LiveData<List<CategoryList.Category>> {
+//        return categoryResponseLiveData
+//    }
 
     fun getCocktailListByFirstName(): LiveData<List<Drinks>>{
         return cocktailListByFirstNameResponseLiveData
