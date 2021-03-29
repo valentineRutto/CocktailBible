@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 
 class MainViewModel(private val cocktailsService: CocktailsService) : ViewModel(){
 
-    fun getPopularCocktails() = liveData(Dispatchers.IO){
+        fun getPopularCocktails() = liveData(Dispatchers.IO){
         emit(Resource.loading(data = null))
 
         try {

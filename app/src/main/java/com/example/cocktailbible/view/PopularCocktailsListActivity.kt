@@ -39,7 +39,7 @@ class PopularCocktailsListActivity : AppCompatActivity() {
         binding = ActivityPopularCocktailsListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar.title = "Popular Cocktails"
+//        binding.toolbar.title = "Popular Cocktails"
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
@@ -94,13 +94,14 @@ class PopularCocktailsListActivity : AppCompatActivity() {
     }
 
     fun setupObserver() {
+
         mainViewModel.getPopularCocktails().observe(this, Observer { popularCocktailList ->
             popularCocktailList?.let { resource ->
 
                 when (resource.status) {
                     Status.SUCCESS -> {
                         showProgress(false)
-                        cocktailCocktailListAdapter?.addData(resource.data!!.drinks)
+                        resource.data?.drinks?.let { cocktailCocktailListAdapter?.addData(it) }
                     }
                     Status.LOADING -> {
                         showProgress(true)
@@ -108,7 +109,6 @@ class PopularCocktailsListActivity : AppCompatActivity() {
                     }
                     Status.ERROR -> {
                         showProgress(false)
-                        Log.d("cocktail", popularCocktailList.message)
                         Toast.makeText(this, popularCocktailList.message, Toast.LENGTH_LONG).show()
                     }
                 }
