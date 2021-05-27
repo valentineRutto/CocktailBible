@@ -3,6 +3,7 @@ package com.example.cocktailbible.network
 import com.example.cocktailbible.network.data.*
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface CocktailsService {
 //    @GET("/search.php")
@@ -28,6 +29,9 @@ interface CocktailsService {
 
     @GET("popular.php")
     suspend fun getPopularCocktails(): CocktailResponse
+
+    @GET("search.php{i}")
+    suspend fun getCocktailByName(@Path( "i") ingredient: String): CocktailRecipeResponse
 
 
 }

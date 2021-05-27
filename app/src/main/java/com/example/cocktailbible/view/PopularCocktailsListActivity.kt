@@ -48,7 +48,6 @@ class PopularCocktailsListActivity : AppCompatActivity() {
         setupViewModel()
         setupUi()
         setupObserver()
-
     }
 
     private fun setupViewModel() {
